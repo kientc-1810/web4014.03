@@ -56,15 +56,22 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // lấy được dữ liệu của để chỉnh sửa
+        $category = DB::table('categories')->where('id',$id)->first();
+        // đẩy dữ liệu chỉnh sửa lên form
+        return view('categories.edit',compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CategoryRequest $request, string $id)
     {
-        //
+        DB::table('categories')->where('id',$id)->update([
+            'name' => $request -> name,
+            'status' => (bool) $request ->status,
+        ]);
+        return redirect()->route('categories.index')->with('success','Cập nhật thành công');
     }
 
     /**
@@ -72,6 +79,7 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        DB::table('categories')->where('id',$id)->delete();
+        return redirect()->route('categories.index')->with('success','Xóa thành công');
     }
 }
